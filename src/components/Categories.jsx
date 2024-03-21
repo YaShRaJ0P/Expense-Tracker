@@ -32,7 +32,7 @@ export const Categories = () => {
                                 <div className="w-full flex flex-row p-3 font-semibold text-lg bg-[#242B33] rounded-t-[4px] ">
                                     <div className="w-3/5">Category</div>
                                     <div className="w-1/5 px-4">Type</div>
-                                    <div className="w-1/5 flex justify-center">Actions</div>
+                                    <div className="w-1/5">Actions</div>
                                 </div>
                                 <div>
                                     <div className="w-full flex flex-row p-3 font-normal text-sm bg-[#151A23]">
@@ -118,7 +118,6 @@ export const Categories = () => {
                                 <button onClick={() => { setincome(false) }} className={`w-1/2 bg-${!income ? "white" : "[#151A23]"} text-${income ? "white" : "[#151A23]"} py-1 rounded-r-sm border-white border-2 flex justify-center align-items-center`}>Income</button>
                             </div>
                             <form action="" className="flex  gap-6 flex-col">
-
                                 <div className="flex flex-col ">
                                     <label htmlFor="Title">Title</label>
                                     <input type="text" name="Title" id="Title" className="w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2" />

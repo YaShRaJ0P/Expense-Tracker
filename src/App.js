@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.css"
 import { Transactions } from "./components/Transactions";
 import { Dashboard } from "./components/Dashboard";
 import { Navbar } from "./components/Navbar";
@@ -7,11 +7,11 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Categories />,
+    element: <Transactions />,
   },
   {
-    path: "/transactions",
-    element: <Transactions />,
+    path: "/categories",
+    element: <Categories />,
   },
   {
     path: "/dashboard",
