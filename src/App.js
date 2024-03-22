@@ -1,29 +1,26 @@
-import "./App.css"
+import "./App.css";
 import { Transactions } from "./components/Transactions";
 import { Dashboard } from "./components/Dashboard";
 import { Navbar } from "./components/Navbar";
 import { Categories } from "./components/Categories";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Transactions />,
-  },
-  {
-    path: "/categories",
-    element: <Categories />,
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard />,
-  },
-]);
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import { appStore } from "./utils/appStore";
+
 function App() {
   return (
-    <div className="bg-[#0F1219] min-h-screen w-full flex flex-row">
-      <Navbar />
-      <RouterProvider router={router} />
-    </div>
+    <Provider store={appStore}>
+      <div className="bg-[#0F1219] min-h-screen w-full flex flex-row">
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/transactions" element={<Transactions />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </Provider>
   );
 }
 

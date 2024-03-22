@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import logo from "../images/logo.png"
 import arrow from "../images/arrow.png"
+import { Link } from 'react-router-dom'
 export const Navbar = () => {
     const [rotate, setrotate] = useState('rotate-180')
     const rotateFunction = () => {
@@ -24,34 +25,46 @@ export const Navbar = () => {
             </div>
             <div className='flex flex-col gap-3'>
                 <div id="dashboard" className=' flex w-full items-center flex-row font-semibold gap-2 px-5 cursor-pointer'>
-                    <lord-icon
-                        src="https://cdn.lordicon.com/fkaukecx.json"
-                        trigger="loop-on-hover"
-                        colors="primary:#ABA49E"
-                        target="#dashboard"
-                        className="w-8 h-8">
-                    </lord-icon>
-                    <p className='inline-block'>Dashboard</p>
+                    <Link to="/">
+                        <div className="flex flex-row items-center gap-2">
+                            <lord-icon
+                                src="https://cdn.lordicon.com/fkaukecx.json"
+                                trigger="loop-on-hover"
+                                colors="primary:#ABA49E"
+                                target="#dashboard"
+                                className="w-8 h-8">
+                            </lord-icon>
+                            <p className='inline-block'>Dashboard</p>
+                        </div>
+                    </Link>
                 </div>
                 <div id="categories" className=' flex w-full items-center flex-row font-semibold gap-2 px-5 cursor-pointer'>
-                    <lord-icon
-                        src="https://cdn.lordicon.com/jnikqyih.json"
-                        trigger="loop-on-hover"
-                        colors="primary:#ABA49E"
-                        target="#categories"
-                        className="w-8 h-8">
-                    </lord-icon>
-                    <p className='inline-block'>Categories</p>
+                    <Link to="/categories">
+                        <div className="flex flex-row items-center gap-2">
+                            <lord-icon
+                                src="https://cdn.lordicon.com/jnikqyih.json"
+                                trigger="loop-on-hover"
+                                colors="primary:#ABA49E"
+                                target="#categories"
+                                className="w-8 h-8">
+                            </lord-icon>
+                            <p className='inline-block'>Categories</p>
+                        </div>
+                    </Link>
                 </div>
                 <div id="transactions" className=' flex w-full items-center flex-row font-semibold gap-2 px-5 cursor-pointer'>
-                    <lord-icon
-                        src="https://cdn.lordicon.com/gjjvytyq.json"
-                        trigger="loop-on-hover"
-                        colors="primary:#ABA49E"
-                        target="#transactions"
-                        className="w-8 h-8">
-                    </lord-icon>
-                    <p className='inline-block'>Transactions</p>
+                    <Link to="/transactions">
+                        <div className='flex flex-row items-center gap-2'>
+                            <lord-icon
+                                src="https://cdn.lordicon.com/gjjvytyq.json"
+                                trigger="loop-on-hover"
+                                colors="primary:#ABA49E"
+                                target="#transactions"
+                                className="w-8 h-8">
+                            </lord-icon>
+                            <p className='inline-block self-center'>Transactions</p>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </nav>
