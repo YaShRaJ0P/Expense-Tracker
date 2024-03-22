@@ -1,21 +1,24 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 const transaction = createSlice({
   name: "Transaction",
-  initialState: [],
+  initialState: {
+    transactions: [],
+  },
   reducers: {
     addTransaction: (state, action) => {
       const newArray = {
         id: nanoid(),
         ...action.payload,
       };
-      state.push(newArray);
+      state.transactions.push(newArray);
     },
     removeTransaction: (state, action) => {
-      state.map((item) => console.log(item.id !== action.payload));
-      return state.filter((item) => item.id !== action.payload);
+      state.transactions = state.transactions.filter(
+        (item) => item.id !== action.payload
+      );
     },
     editTransaction: (state, action) => {
-      return state.map((item) =>
+      state.transactions = state.transactions.map((item) =>
         item.id === action.payload.id
           ? {
               ...item,
