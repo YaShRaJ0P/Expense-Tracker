@@ -4,9 +4,11 @@ import RedDollar from "../images/dollar-red.png";
 import BlueDollar from "../images/dollar-blue.png";
 import { Doughnut, Line } from 'react-chartjs-2';
 import "chart.js/auto";
+import { useSelector } from 'react-redux';
 export const Dashboard = () => {
+    const totalMoney = useSelector(state => state.transaction)
     return (
-        <div className='flex flex-col  justify-center items-center h-100vh w-full'>
+        <div className='flex flex-col  justify-center items-center h-100vh w-screen'>
             <div className='flex flex-row gap-5 flex-wrap'>
                 <div className='flex flex-row '>
                     <div className=' bg-zinc-900 rounded-l-xl px-6 py-2 flex items-center justify-center'>
@@ -14,7 +16,7 @@ export const Dashboard = () => {
                     </div>
                     <div className=' bg-stone-950 rounded-r-xl px-10 py-2'>
                         <h4 className='text-white text-sm font-light'>Total Income</h4>
-                        <h3 className='text-white text-4xl font-black'>$ 500</h3>
+                        <h3 className='text-white text-4xl font-black'>{totalMoney.income}</h3>
                     </div>
                 </div>
                 <div className='flex flex-row '>
@@ -22,8 +24,8 @@ export const Dashboard = () => {
                         <img src={RedDollar} alt="" className='size-10' />
                     </div>
                     <div className=' bg-stone-950 rounded-r-xl px-10 py-2'>
-                        <h4 className='text-white text-sm font-light'>Total Income</h4>
-                        <h3 className='text-white text-4xl font-black'>$ 500</h3>
+                        <h4 className='text-white text-sm font-light'>Total Expense</h4>
+                        <h3 className='text-white text-4xl font-black'>{totalMoney.expense}</h3>
                     </div>
                 </div>
                 <div className='flex flex-row '>
@@ -31,8 +33,8 @@ export const Dashboard = () => {
                         <img src={BlueDollar} alt="" className='size-10' />
                     </div>
                     <div className=' bg-[#151A23] rounded-r-xl px-10 py-2'>
-                        <h4 className='text-white text-sm font-light'>Total Income</h4>
-                        <h3 className='text-white text-4xl font-black'>$ 500</h3>
+                        <h4 className='text-white text-sm font-light'>Total Balance</h4>
+                        <h3 className='text-white text-4xl font-black'>{totalMoney.balance}</h3>
                     </div>
                 </div>
             </div>

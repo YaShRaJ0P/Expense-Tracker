@@ -12,10 +12,15 @@ export const Transactions = () => {
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
     const [category, setCategory] = useState("");
+    const [expenditure, setExpenditure] = useState(null);
     const dispatch = useDispatch();
     const addTransactionFunction = () => {
         setnewTransaction(!newTransaction);
         seteditable(false);
+        setDate("");
+        setAmount("");
+        setDescription("");
+        setCategory("");
     };
     const categories = useSelector(state => state.category);
     const transaction = useSelector(state => state.transaction.transactions);
@@ -31,40 +36,42 @@ export const Transactions = () => {
             document.getElementById("Date").disabled = false;
         }
     }
-    const removeTransactionFunction = (id) => {
-        dispatch(removeTransaction(id));
+    const removeTransactionFunction = (transaction) => {
+        dispatch(removeTransaction(transaction));
     }
     const dispatchTransaction = (e) => {
+        console.log(category);
         e.preventDefault();
         setnewTransaction(false);
-        if (!editable) dispatch(addTransaction({ date: date, amount: amount, description: description, category: category }));
+        if (!editable) dispatch(addTransaction({ date: date, amount: amount, description: description, category: category, expenditure: expenditure }));
         else {
-            dispatch(editTransaction({ amount: amount, description: description, date: date, category: category, id: id }));
+            dispatch(editTransaction({ amount: amount, description: description, date: date, category: category, id: id, expenditure: expenditure }));
             seteditable(false);
         }
         setDate("");
         setAmount("");
         setDescription("");
         setCategory("");
+        setExpenditure("");
     }
     const editFunction = (transaction) => {
         seteditable(true);
         setnewTransaction(true);
         setDate(transaction.date);
-        console.log(date);
         setAmount(transaction.amount);
+        setCategory(transaction.category);
         setDescription(transaction.description);
         setid(transaction.id);
+        setExpenditure(transaction.expenditure);
     }
 
     return (
-        <div className="grid place-items-center w-screen px-24 max-lg:px-8">
+        <div className="grid place-items-center w-screen px-24 max-lg:px-8" >
             <div className="w-full">
                 <div className="flex justify-between flex-row w-[73.8%]">
                     <h3 className="font-bold text-lg">{newTransaction || editable ? "Create a New Transaction" : "Transactions"}</h3>
                     <button
-                        className={`bg-${newTransaction || editable ? "red" : "green"}-500 p-3 hover:bg-${newTransaction || editable ? "red" : "green"
-                            }-600 rounded-[3px] font-semibold text-base`}
+                        className={`${newTransaction || editable ? "bg-red-500" : "bg-green-500"} p-3 ${newTransaction || editable ? "hover:bg-red-600" : "hover:bg-green-600"} rounded-[3px] font-semibold text-base`}
                         onClick={addTransactionFunction}
                     >
                         {newTransaction || editable ? (
@@ -88,7 +95,7 @@ export const Transactions = () => {
                                 <div>
                                     {transaction.map((transaction) => (
                                         <div key={transaction.id} className="w-full flex flex-row p-3 font-normal text-sm bg-[#151A23]">
-                                            <div className="w-1/2 flex self-center">{transaction.category}</div>
+                                            <div className="w-1/2 flex self-center">{categories.find(cat => cat.id === transaction.category).icon}{categories.find(cat => cat.id === transaction.category).title}</div>
                                             <div className="w-1/6 flex justify-start">
                                                 {transaction.date.slice(0, 10)}
                                             </div>
@@ -100,7 +107,7 @@ export const Transactions = () => {
                                                     <img src={edit} alt="" width="22px" height="22px" onClick={() => editFunction(transaction)} />
                                                 </div>
                                                 <div>
-                                                    <img src={bin} alt="" width="24px" height="24px" onClick={() => removeTransactionFunction(transaction.id)} />
+                                                    <img src={bin} alt="" width="24px" height="24px" onClick={() => removeTransactionFunction(transaction)} />
                                                 </div>
                                             </div>
                                         </div>
@@ -115,18 +122,19 @@ export const Transactions = () => {
                                 <div className="flex flex-col ">
                                     <div className="flex flex-row justify-between">
                                         <label htmlFor="Date">Date</label>
-                                        <div>
+                                        <div className="flex flex-row gap-2 justify-center items-center">
                                             <input type="checkbox" name="Now" id="Now" onChange={changeDate} />
                                             <label htmlFor="Now">Now</label>
                                         </div>
                                     </div>
-                                    <input required value={date} onChange={(e) => { setDate(e.target.value); console.log(e.target.value); }} type="datetime-local" name="Date" id="Date" className=" placeholder-shown:text-white w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2" />
+                                    <input required value={date} onChange={(e) => { setDate(e.target.value); }} type="datetime-local" name="Date" id="Date" className=" placeholder-shown:text-white w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2" />
                                 </div>
                                 <div className="flex flex-col ">
                                     <label htmlFor="Category">Category</label>
-                                    <select required value={category} onChange={(e) => setCategory(e.target.value)} name="Category" id="Category" className=" w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2">
+                                    <select defaultValue="" required onChange={(e) => { setCategory(e.target.value); setExpenditure(categories.find(category => category.id === e.target.value).expenditure); }} value={category} name="Category" id="Category" className=" w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2">
+                                        <option value="" disabled hidden>Select a Category</option>
                                         {categories.map((category) => (
-                                            <option key={category.id} value={category.icon+" "+category.title} >
+                                            <option key={category.id} value={category.id} >
                                                 {category.icon}&nbsp; {category.title}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 {category.expenditure ? "🔴" : "🟢"}
                                             </option>
@@ -143,7 +151,7 @@ export const Transactions = () => {
                                     <textarea value={description} onChange={(e) => setDescription(e.target.value)} name="Note" id="Note" className=" resize-y w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2" ></textarea>
                                 </div>
                                 <div>
-                                    <button className="bg-green-500 px-2 py-1 hover:bg-green-600 rounded-[3px] font-semibold text-base">Submit</button>
+                                    <button className="bg-green-600 px-2 py-1 hover:bg-green-700 rounded-[3px] font-semibold text-base">Submit</button>
                                 </div>
                             </form>
                         </div>

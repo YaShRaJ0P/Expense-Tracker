@@ -37,8 +37,7 @@ export const Categories = () => {
                 <div className="flex justify-between flex-row w-3/5">
                     <h3 className="font-bold text-lg">{newCategory || editable ? "Create a New Category" : "Categories"}</h3>
                     <button
-                        className={`bg-${newCategory || editable ? "red" : "green"}-500 p-3 hover:bg-${newCategory || editable ? "red" : "green"
-                            }-600 rounded-[3px] font-semibold text-base`}
+                        className={`${newCategory || editable ? "bg-red-500" : "bg-green-500"} p-3 ${newCategory || editable ? "hover:bg-red-600" : "hover:bg-green-600"} rounded-[3px] font-semibold text-base`}
                         onClick={() => { addCategoryFunction() }}
                     >
                         {newCategory || editable ? (
@@ -87,8 +86,8 @@ export const Categories = () => {
                     ) : (
                         <div className="flex flex-col w-3/5 p-8 gap-6 bg-[#222B38]">
                             <div className="flex flex-row">
-                                <button onClick={() => { setexpenditure(true) }} className={`w-1/2 bg-${expenditure ? "[#ffffff]" : "[#151a23]"} text-${expenditure ? "[#151a23]" : "[#ffffff]"} py-1 rounded-l-sm border-white border-2 flex justify-center items-center`}>Expense</button>
-                                <button onClick={() => { setexpenditure(false) }} className={`w-1/2 bg-${expenditure ? "[#151a23]" : "[#ffffff]"} text-${expenditure ? "[#ffffff]" : "[#151a23]"} py-1 rounded-r-sm border-white border-2 flex justify-center items-center`}>Income</button>
+                                <button onClick={() => { setexpenditure(true) }} className={`w-1/2 ${expenditure ? "bg-white" : "bg-[#151a23]"} ${expenditure ? "text-[#151a23]" : "text-white"} py-1 rounded-l-sm border-white border-2 flex justify-center items-center`}>Expense</button>
+                                <button onClick={() => { setexpenditure(false) }} className={`w-1/2 ${expenditure ? "bg-[#151a23]" : "bg-white"} ${expenditure ? "text-white" : "text-[#151a23]"} py-1 rounded-r-sm border-white border-2 flex justify-center items-center`}>Income</button>
                             </div>
                             <form className="flex gap-6 flex-col" onSubmit={(e) => dispatchCategory(e)}>
                                 <div className="flex flex-col ">
@@ -99,8 +98,11 @@ export const Categories = () => {
                                     <label htmlFor="Icon">Icon</label>
                                     <input required ref={IconRef} type="text" name="Icon" id="Icon" className="w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2" />
                                 </div>
-                                <div>
-                                    <input type="submit" value="Submit" className="bg-green-500 cursor-pointer px-2 py-1 hover:bg-green-600 rounded-[3px] font-semibold text-base" />
+                                <div className="flex flex-row w-full justify-between">
+                                    <input type="submit" value="Submit" className="bg-green-600 cursor-pointer px-2 py-1 hover:bg-green-700 rounded-[3px] font-semibold text-base" />
+                                    <div className={`${expenditure ? "bg-red-500" : "bg-green-500"} rounded-[4px] px-3 flex items-center w-18`}>
+                                        {expenditure ? "Expense" : "Income"}
+                                    </div>
                                 </div>
                             </form>
                         </div>

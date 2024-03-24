@@ -3,23 +3,21 @@ import logo from "../images/logo.png"
 import arrow from "../images/arrow.png"
 import { Link } from 'react-router-dom'
 export const Navbar = () => {
-    const [rotate, setrotate] = useState('rotate-180')
-    const rotateFunction = () => {
-        rotate === 'rotate-180' ? setrotate('rotate-0') : setrotate('rotate-180');
+    const [navOpen, setNavOpen] = useState(true);
+    const navOpenFunction = () => {
+        setNavOpen(!navOpen);
     }
     return (
-        <nav className='p-6 w-1/5 flex flex-col gap-10 text-white border-r-[1px] border-gray-500 border-opacity-40 border-dashed'>
-            <div>
-                <div className='flex justify-between'>
-                    <img src={logo} alt="" className='w-8 h-8' />
-                    <img src={arrow} alt="" className={`w-6 h-6 ${rotate} cursor-pointer`} onClick={rotateFunction} />
-                </div>
+        <nav className={`p-6 ${navOpen ? "w-1/5" : "w-[8%]"} items-center transition-all flex flex-col gap-10 text-white border-r-[1px] border-gray-500 border-opacity-40 border-dashed`}>
+            <div className={`flex ${navOpen ? "justify-between" : "justify-center"} items-center h-6 w-full`}>
+                <img src={logo} alt="" className={`w-8 h-8 ${!navOpen && "hidden"} `} />
+                <img src={arrow} alt="" className={`w-6 h-6 ${navOpen ? "rotate-180" : "rotate-0"} cursor-pointer`} onClick={() => navOpenFunction()} />
             </div>
-            <div className='w-full bg-[#002bbb] flex flex-row rounded-lg px-6 py-3 justify-between'>
+            <div className={`w-full ${navOpen ? "bg-[#002bbb]" : "bg-transparent"} flex flex-row rounded-lg ${navOpen && "px-6"} py-3 ${navOpen ? "justify-between" : "justify-center"} items-center`}>
                 <div>
                     <img src={logo} alt="" className='w-8 h-8' />
                 </div>
-                <div className='font-bold text-xl'>
+                <div className={`font-bold text-xl ${!navOpen ? "hidden":""} `}>
                     Yash Raj
                 </div>
             </div>
@@ -34,7 +32,7 @@ export const Navbar = () => {
                                 target="#dashboard"
                                 className="w-8 h-8">
                             </lord-icon>
-                            <p className='inline-block'>Dashboard</p>
+                            <p className={`inline-block ${!navOpen && "hidden"}`}>Dashboard</p>
                         </div>
                     </Link>
                 </div>
@@ -48,7 +46,7 @@ export const Navbar = () => {
                                 target="#categories"
                                 className="w-8 h-8">
                             </lord-icon>
-                            <p className='inline-block'>Categories</p>
+                            <p className={`inline-block ${!navOpen && "hidden"}`}>Categories</p>
                         </div>
                     </Link>
                 </div>
@@ -62,7 +60,7 @@ export const Navbar = () => {
                                 target="#transactions"
                                 className="w-8 h-8">
                             </lord-icon>
-                            <p className='inline-block self-center'>Transactions</p>
+                            <p className={`inline-block self-center ${!navOpen && "hidden"}`}>Transactions</p>
                         </div>
                     </Link>
                 </div>
