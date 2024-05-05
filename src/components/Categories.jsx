@@ -1,15 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import edit from "../images/edit.png";
 import bin from "../images/delete.png";
 import { addCategory, editCategory, removeCategory } from "../utils/category";
+import app from "../utils/firebaseConfig";
+import { getDatabase, ref, set, push } from "firebase/database";
 export const Categories = () => {
     const [newCategory, setnewCategory] = useState(false);
     const [expenditure, setexpenditure] = useState(true);
     const [editable, seteditable] = useState(false);
-    const [id, setid] = useState(null);
-    const TitleRef = useRef(null);
-    const IconRef = useRef(null);
+    const [id, setid] = useState("");
+    const [title, setTitle] = useState("");
+    const [icon, setIcon] = useState("");
     const dispatch = useDispatch();
     const category = useSelector(state => state.category);
     const addCategoryFunction = () => {
@@ -19,19 +21,32 @@ export const Categories = () => {
     const removeCategoryFunction = (id) => {
         dispatch(removeCategory(id));
     }
-    const dispatchCategory = (e) => {
+    const dispatchCategory = async (e) => {
+        const db = getDatabase(app);
         e.preventDefault();
-        if (!TitleRef.current.value.trim() || !IconRef.current.value.trim()) {
+        if (!title.trim() || !icon.trim()) {
             return;
         }
         setnewCategory(false);
-        if (!editable) dispatch(addCategory({ title: TitleRef.current.value, icon: IconRef.current.value, expenditure: expenditure }));
-        else {
-            dispatch(editCategory({ title: TitleRef.current.value, icon: IconRef.current.value, expenditure: expenditure, id: id }));
+        if (!editable) {
+            const newDocRef = push(ref(db, "categories"));
+            set(newDocRef, {
+                title: title,
+                icon: icon,
+                expenditure: expenditure
+            }).then(() => {
+                alert("Category added successfully");
+            }).catch((error) => {
+                alert("Error occured");
+            })
+            dispatch(addCategory({ title: title, icon: icon, expenditure: expenditure }));
+        } else {
+            dispatch(editCategory({ title: title, icon: icon, expenditure: expenditure, id: id }));
             seteditable(false);
         }
+
     }
-    return (
+    return (<>
         <div className="grid place-items-center w-screen px-24 max-lg:px-8">
             <div className="w-full">
                 <div className="flex justify-between flex-row w-3/5">
@@ -92,11 +107,11 @@ export const Categories = () => {
                             <form className="flex gap-6 flex-col" onSubmit={(e) => dispatchCategory(e)}>
                                 <div className="flex flex-col ">
                                     <label htmlFor="Title">Title</label>
-                                    <input required ref={TitleRef} type="text" name="Title" id="Title" className="w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2" />
+                                    <input required value={title} onChange={(e) => setTitle(e.target.value)} type="text" name="Title" id="Title" className="w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2" />
                                 </div>
                                 <div>
                                     <label htmlFor="Icon">Icon</label>
-                                    <input required ref={IconRef} type="text" name="Icon" id="Icon" className="w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2" />
+                                    <input required value={icon} onChange={(e) => setIcon(e.target.value)} type="text" name="Icon" id="Icon" className="w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2" />
                                 </div>
                                 <div className="flex flex-row w-full justify-between">
                                     <input type="submit" value="Submit" className="bg-green-600 cursor-pointer px-2 py-1 hover:bg-green-700 rounded-[3px] font-semibold text-base" />
@@ -119,5 +134,6 @@ export const Categories = () => {
                 </div>
             </div>
         </div>
+    </>
     );
 };
