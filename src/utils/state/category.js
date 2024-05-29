@@ -1,26 +1,10 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 const category = createSlice({
   name: "category",
-  initialState: [
-    {
-      id: nanoid(),
-      title: "Food",
-      icon: "🍚",
-      expenditure: true,
-    },
-    {
-      id: nanoid(),
-      title: "Job",
-      icon: "🏢",
-      expenditure: false,
-    },
-  ],
+  initialState: [],
   reducers: {
     addCategory: (state, action) => {
-      const newArray = {
-        id: nanoid(),
-        ...action.payload,
-      };
+      const newArray = action.payload;
       state.unshift(newArray);
     },
     removeCategory: (state, action) => {
@@ -38,8 +22,12 @@ const category = createSlice({
           : item
       );
     },
+    emptyCategory: (state, action) => {
+      return [];
+    },
   },
 });
 
-export const { addCategory, removeCategory, editCategory } = category.actions;
+export const { addCategory, removeCategory, editCategory, emptyCategory } =
+  category.actions;
 export const categoryReducer = category.reducer;

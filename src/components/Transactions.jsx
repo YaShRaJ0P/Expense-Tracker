@@ -7,83 +7,100 @@ import {
   addTransaction,
   editTransaction,
   removeTransaction,
-} from "../utils/transaction";
+} from "../utils/state/transaction";
+import { ref, remove, push, set, update } from "firebase/database";
+import { database } from "../utils/firebaseConfig";
 export const Transactions = () => {
+  const [transaction, setTransaction] = useState({
+    id: "",
+    amount: "",
+    description: "",
+    date: "",
+    category: "",
+    expenditure: false,
+  });
   const [newTransaction, setnewTransaction] = useState(false);
   const [editable, seteditable] = useState(false);
-  const [id, setid] = useState(null);
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
-  const [category, setCategory] = useState("");
-  const [expenditure, setExpenditure] = useState(null);
   const dispatch = useDispatch();
+  const uid = useSelector((state) => state.user.uid);
+
   const addTransactionFunction = () => {
     setnewTransaction(!newTransaction);
     seteditable(false);
-    setDate("");
-    setAmount("");
-    setDescription("");
-    setCategory("");
+    setTransaction({
+      id: "",
+      amount: "",
+      description: "",
+      date: "",
+      category: "",
+      expenditure: false,
+    });
   };
   const categories = useSelector((state) => state.category);
-  const transaction = useSelector((state) => state.transaction.transactions);
+  const transactionLists = useSelector(
+    (state) => state.transaction.transactions
+  );
   const changeDate = (e) => {
     var d = new Date();
     var newd = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
     if (e.target.checked) {
-      setDate(newd.toISOString().substring(0, 16));
+      setTransaction({
+        ...transaction,
+        date: newd.toISOString().substring(0, 16),
+      });
       document.getElementById("Date").disabled = true;
     } else {
-      setDate(null);
+      setTransaction({
+        ...transaction,
+        date: null,
+      });
       document.getElementById("Date").disabled = false;
     }
   };
   const removeTransactionFunction = (transaction) => {
+    remove(ref(database, "users/" + uid + "/transactions/" + transaction.id));
     dispatch(removeTransaction(transaction));
   };
   const dispatchTransaction = (e) => {
-    console.log(category);
     e.preventDefault();
     setnewTransaction(false);
-    if (!editable)
-      dispatch(
-        addTransaction({
-          date: date,
-          amount: amount,
-          description: description,
-          category: category,
-          expenditure: expenditure,
-        })
+    const transactionRef = ref(database, "users/" + uid + "/transactions/");
+    const newTransactionRef = push(transactionRef);
+    if (!editable) {
+      set(newTransactionRef, {
+        ...transaction,
+        id: newTransactionRef.key,
+      });
+      dispatch(addTransaction(transaction));
+    } else {
+      const transactionRef = ref(
+        database,
+        "users/" + uid + "/transactions/" + transaction.id
       );
-    else {
-      dispatch(
-        editTransaction({
-          amount: amount,
-          description: description,
-          date: date,
-          category: category,
-          id: id,
-          expenditure: expenditure,
-        })
-      );
+      update(transactionRef, transaction);
+      dispatch(editTransaction(transaction));
       seteditable(false);
     }
-    setDate("");
-    setAmount("");
-    setDescription("");
-    setCategory("");
-    setExpenditure("");
+    setTransaction({
+      id: "",
+      amount: "",
+      description: "",
+      date: "",
+      category: "",
+      expenditure: false,
+    });
   };
   const editFunction = (transaction) => {
     seteditable(true);
     setnewTransaction(true);
-    setDate(transaction.date);
-    setAmount(transaction.amount);
-    setCategory(transaction.category);
-    setDescription(transaction.description);
-    setid(transaction.id);
-    setExpenditure(transaction.expenditure);
+    setTransaction({
+      id: transaction.id,
+      amount: transaction.amount,
+      description: transaction.description,
+      date: transaction.date,
+      category: transaction.category,
+      expenditure: transaction.expenditure,
+    });
   };
 
   return (
@@ -125,7 +142,7 @@ export const Transactions = () => {
                     <div className="w-1/6 flex justify-center">Actions</div>
                   </div>
                   <div>
-                    {transaction.map((transaction) => (
+                    {transactionLists?.map((transaction) => (
                       <div
                         key={transaction.id}
                         className="w-full flex flex-row p-3 font-normal text-sm bg-[#151A23]"
@@ -197,9 +214,12 @@ export const Transactions = () => {
                     </div>
                     <input
                       required
-                      value={date}
+                      value={transaction.date}
                       onChange={(e) => {
-                        setDate(e.target.value);
+                        setTransaction({
+                          ...transaction,
+                          date: e.target.value,
+                        });
                       }}
                       type="datetime-local"
                       name="Date"
@@ -213,14 +233,15 @@ export const Transactions = () => {
                       defaultValue=""
                       required
                       onChange={(e) => {
-                        setCategory(e.target.value);
-                        setExpenditure(
-                          categories.find(
+                        setTransaction({
+                          ...transaction,
+                          category: e.target.value,
+                          expenditure: categories.find(
                             (category) => category.id === e.target.value
-                          ).expenditure
-                        );
+                          ).expenditure,
+                        });
                       }}
-                      value={category}
+                      value={transaction.category}
                       name="Category"
                       id="Category"
                       className=" w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2"
@@ -241,8 +262,13 @@ export const Transactions = () => {
                     <label htmlFor="Amount">Amount</label>
                     <input
                       required
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                      value={transaction.amount}
+                      onChange={(e) =>
+                        setTransaction({
+                          ...transaction,
+                          amount: e.target.value,
+                        })
+                      }
                       type="number"
                       name="Amount"
                       id="Amount"
@@ -256,8 +282,13 @@ export const Transactions = () => {
                   <div>
                     <label htmlFor="Note">Note</label>
                     <textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
+                      value={transaction.description}
+                      onChange={(e) =>
+                        setTransaction({
+                          ...transaction,
+                          description: e.target.value,
+                        })
+                      }
                       name="Note"
                       id="Note"
                       className=" resize-y w-full bg-[#212429] rounded-sm border-white border-[1px] text-white p-2"

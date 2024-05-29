@@ -1,19 +1,18 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  transactions: [],
+  income: 0,
+  expense: 0,
+  balance: 0,
+};
+
 const transaction = createSlice({
   name: "Transaction",
-  initialState: {
-    transactions: [],
-    income: 0,
-    expense: 0,
-    balance: 0,
-  },
+  initialState,
   reducers: {
     addTransaction: (state, action) => {
-      const newArray = {
-        id: nanoid(),
-        ...action.payload,
-      };
-      state.transactions.unshift(newArray);
+      state.transactions.unshift(action.payload);
       action.payload.expenditure
         ? (state.expense += parseFloat(action.payload.amount))
         : (state.income += parseFloat(action.payload.amount));
@@ -79,9 +78,19 @@ const transaction = createSlice({
       state.balance = state.income - state.expense;
       state.transactions = newArr;
     },
+    emptyTransaction: (state, action) => {
+      state.transactions = [];
+      state.income = 0;
+      state.expense = 0;
+      state.balance = 0;
+    },
   },
 });
 
-export const { addTransaction, removeTransaction, editTransaction } =
-  transaction.actions;
+export const {
+  addTransaction,
+  removeTransaction,
+  editTransaction,
+  emptyTransaction,
+} = transaction.actions;
 export const transactionReducer = transaction.reducer;

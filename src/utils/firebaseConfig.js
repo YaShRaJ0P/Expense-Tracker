@@ -1,8 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
-
+import {
+  browserSessionPersistence,
+  getAuth,
+  setPersistence,
+} from "firebase/auth";
+import { getDatabase } from "firebase/database";
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 
@@ -15,6 +19,7 @@ const firebaseConfig = {
   authDomain: "expensee-3d192.firebaseapp.com",
   databaseURL:
     "https://expensee-3d192-default-rtdb.asia-southeast1.firebasedatabase.app",
+
   projectId: "expensee-3d192",
   storageBucket: "expensee-3d192.appspot.com",
   messagingSenderId: "1003024618556",
@@ -25,5 +30,14 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const database = getDatabase(app);
 const analytics = getAnalytics(app);
+setPersistence(auth, browserSessionPersistence)
+  .then(() => {
+    console.log("Authentication state persistence set to 'local'");
+  })
+  .catch((error) => {
+    console.error("Error setting authentication state persistence:", error);
+  });
+
 export default app;
