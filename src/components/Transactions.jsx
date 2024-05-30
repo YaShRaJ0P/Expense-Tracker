@@ -71,7 +71,7 @@ export const Transactions = () => {
         ...transaction,
         id: newTransactionRef.key,
       });
-      dispatch(addTransaction(transaction));
+      dispatch(addTransaction({...transaction,id:newTransactionRef.key}));
     } else {
       const transactionRef = ref(
         database,
@@ -151,16 +151,16 @@ export const Transactions = () => {
                           {
                             categories.find(
                               (cat) => cat.id === transaction.category
-                            ).icon
+                            )?.icon
                           }
                           {
                             categories.find(
                               (cat) => cat.id === transaction.category
-                            ).title
+                            )?.title
                           }
                         </div>
                         <div className="w-1/6 flex justify-start">
-                          {transaction.date.slice(0, 10)}
+                          {transaction.date?.slice(0, 10)}
                         </div>
                         <div className="w-1/6 flex justify-start">
                           {transaction.amount}

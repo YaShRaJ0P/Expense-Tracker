@@ -36,7 +36,7 @@ export const Navbar = () => {
     <nav
       className={`p-6 ${
         navOpen ? "w-1/5" : "w-[8%]"
-      } flex flex-col justify-between text-white border-r-[1px] border-gray-500 border-opacity-40 border-dashed transition-all duration-300 `}
+      }text-center sticky top-0 h-screen flex flex-col justify-between text-white border-r-[1px] border-gray-500 border-opacity-40 border-dashed transition-all duration-300 `}
     >
       <div className="flex flex-col gap-10 h-4/5">
         <div
