@@ -12,10 +12,10 @@ import { fetchCategoryData } from "../utils/fetch/fetchCategory";
 
 export const Authentication = () => {
   const dispatch = useDispatch();
-  const [isSignUp, setisSignUp] = useState(false);
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const [username, setusername] = useState("");
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
 
   const SignUp = async () => {
     try {
@@ -34,11 +34,8 @@ export const Authentication = () => {
       await set(ref(database, "users/" + uid), {
         username: username,
       });
-      const categoriesRef = await ref(
-        database,
-        "users/" + user.uid + "/categories/"
-      );
 
+      const categoriesRef = ref(database, "users/" + user.uid + "/categories/");
       const categoriesData = {
         [push(categoriesRef).key]: {
           title: "Food",
@@ -71,7 +68,7 @@ export const Authentication = () => {
 
       fetchCategoryData(dispatch, uid);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -79,91 +76,104 @@ export const Authentication = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   return (
-    <div className="flex justify-center items-center w-screen h-screen">
-      <div className="w-1/2 bg-black rounded-md flex flex-col items-center justify-center gap-2 p-10">
-        {isSignUp && (
-          <div className="flex flex-col w-3/5">
+    <div className="flex justify-center items-center w-screen h-screen bg-gray-900">
+      <div className="w-full max-w-md p-8 space-y-8 bg-gray-800 rounded-lg shadow-md">
+        <h2 className="text-center text-2xl font-bold text-white">
+          {isSignUp ? "Sign Up" : "Sign In"}
+        </h2>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            isSignUp ? SignUp() : SignIn();
+          }}
+          className="flex flex-col gap-4"
+        >
+          {isSignUp && (
+            <div className="flex flex-col">
+              <label
+                htmlFor="Username"
+                className="block text-sm font-medium text-gray-300"
+              >
+                Username
+              </label>
+              <input
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                type="text"
+                name="Username"
+                id="Username"
+                className="block w-full mt-1 p-2 border border-gray-600 rounded-md bg-gray-700 text-white shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+          )}
+          <div className="flex flex-col">
             <label
-              htmlFor="Username"
-              className='"block text-sm font-medium leading-6 '
+              htmlFor="EmailId"
+              className="block text-sm font-medium text-gray-300"
             >
-              Username
+              Email Id
             </label>
             <input
-              value={username}
-              onChange={(e) => setusername(e.target.value)}
-              type="text"
-              name="Username"
-              id="Username"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              name="EmailId"
+              id="EmailId"
+              className="block w-full mt-1 p-2 border border-gray-600 rounded-md bg-gray-700 text-white shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-        )}
-        <div className="flex flex-col w-3/5">
-          <label
-            htmlFor="EmailId"
-            className='"block text-sm font-medium leading-6 '
-          >
-            Email Id
-          </label>
-          <input
-            value={email}
-            onChange={(e) => setemail(e.target.value)}
-            type="email"
-            name="EmailId"
-            id="EmailId"
-            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2"
-          />
-        </div>
-        <div className="flex flex-col w-3/5">
-          <label
-            htmlFor="Password"
-            className='"block text-sm font-medium leading-6 '
-          >
-            Password
-          </label>
-          <input
-            value={password}
-            onChange={(e) => setpassword(e.target.value)}
-            type="password"
-            name="Password"
-            id="Password"
-            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2"
-          />
-        </div>
-        <button
-          onClick={isSignUp ? () => SignUp() : () => SignIn()}
-          type="submit"
-          className="w-1/2 mt-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          {isSignUp ? "Sign Up" : "Sign In"}
-        </button>
-        {isSignUp ? (
-          <p className="font-semibold text-sm ">
-            Already a User?{" "}
-            <button
-              onClick={() => setisSignUp(false)}
-              className=" underline text-indigo-600 cursor-pointer"
+          <div className="flex flex-col">
+            <label
+              htmlFor="Password"
+              className="block text-sm font-medium text-gray-300"
             >
-              SignIn.
-            </button>
-          </p>
-        ) : (
-          <p className="font-semibold text-sm ">
-            New User?{" "}
-            <button
-              onClick={() => setisSignUp(true)}
-              className=" underline text-indigo-600 cursor-pointer"
-            >
-              SignUp.
-            </button>
-          </p>
-        )}
+              Password
+            </label>
+            <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              name="Password"
+              id="Password"
+              autoComplete="true"
+              className="block w-full mt-1 p-2 border border-gray-600 rounded-md bg-gray-700 text-white shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full mt-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-semibold shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            {isSignUp ? "Sign Up" : "Sign In"}
+          </button>
+        </form>
+        <p className="mt-4 text-center text-sm text-gray-400">
+          {isSignUp ? (
+            <>
+              Already a user?{" "}
+              <button
+                onClick={() => setIsSignUp(false)}
+                className="text-indigo-400 font-medium hover:underline"
+              >
+                Sign In
+              </button>
+            </>
+          ) : (
+            <>
+              New user?{" "}
+              <button
+                onClick={() => setIsSignUp(true)}
+                className="text-indigo-400 font-medium hover:underline"
+              >
+                Sign Up
+              </button>
+            </>
+          )}
+        </p>
       </div>
     </div>
   );

@@ -145,7 +145,7 @@ export const Transactions = () => {
                     {transactionLists?.map((transaction) => (
                       <div
                         key={transaction.id}
-                        className="w-full flex flex-row p-3 font-normal text-sm bg-[#151A23]"
+                        className="w-full flex flex-row p-3 font-normal text-sm bg-[#151A23] rounded-b-[4px]"
                       >
                         <div className="w-1/2 flex self-center">
                           {
@@ -302,7 +302,7 @@ export const Transactions = () => {
                 </form>
               </div>
             )}
-            <div className="w-1/3 bg-[#151A23] grid place-items-center">
+            <div className="w-1/3 bg-[#151A23] grid place-items-center ">
               <lord-icon
                 src="https://cdn.lordicon.com/yrbmguoo.json"
                 trigger="loop"

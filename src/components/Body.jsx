@@ -21,8 +21,8 @@ export const Body = () => {
       if (user) {
         const { uid, email, displayName } = user;
         dispatch(addUser({ uid, email, displayName }));
-        fetchCategoryData(dispatch, uid);
-        fetchTransactionData(dispatch, uid);
+        await fetchCategoryData(dispatch, uid);
+        await fetchTransactionData(dispatch, uid);
       } else {
         dispatch(removeUser());
         dispatch(emptyCategory());
@@ -33,7 +33,6 @@ export const Body = () => {
   }, [dispatch]);
 
   const user = useSelector((state) => state.user);
-
   return (
     <div className="bg-[#0F1219] min-h-screen w-full flex flex-row">
       <BrowserRouter>
