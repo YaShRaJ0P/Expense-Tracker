@@ -35,8 +35,8 @@ export const Navbar = () => {
   return (
     <nav
       className={`p-6 ${
-        navOpen ? "w-1/5" : "w-[8%]"
-      }text-center sticky top-0 h-screen flex flex-col justify-between text-white border-r-[1px] border-gray-500 border-opacity-40 border-dashed transition-all duration-300 `}
+        !navOpen && " max-md:m-2 max-md:h-fit max-md:border-2 max-md:border-white max-md:rounded-md max-md:border-solid max-md:p-2"
+      } text-center sticky top-0 h-screen flex flex-col justify-between text-white border-r-[1px] border-gray-500 border-opacity-40 border-dashed transition-all duration-300 max-md:absolute bg-inherit`}
     >
       <div className="flex flex-col gap-10 h-4/5">
         <div
@@ -64,19 +64,23 @@ export const Navbar = () => {
           className={`flex items-center rounded-lg py-3 ${
             navOpen
               ? "px-6 bg-[#002bbb] justify-between"
-              : "bg-transparent justify-center"
+              : "bg-transparent justify-center max-md:hidden"
           } transition-all duration-300`}
         >
           <img src={logo} alt="User" className="w-8 h-8" />
           <div
             className={`font-bold text-xl ${
-              !navOpen && "hidden"
+              !navOpen && "hidden max-md:hidden"
             } transition-all duration-300`}
           >
             {user.displayName}
           </div>
         </div>
-        <div className="flex flex-col gap-3 justify-center items-center">
+        <div
+          className={`flex flex-col gap-3 justify-center items-center ${
+            !navOpen && "max-md:hidden"
+          }`}
+        >
           <NavItem
             id="dashboard"
             to="/"
@@ -101,7 +105,9 @@ export const Navbar = () => {
         </div>
       </div>
       <button
-        className="w-full bg-blue-700 text-white font-semibold px-3 py-2 text-base rounded-md transition-all duration-300 hover:bg-blue-600"
+        className={`w-full bg-blue-700 text-white font-semibold px-3 py-2 text-base rounded-md transition-all duration-300 hover:bg-blue-600 ${
+          !navOpen && "max-md:hidden"
+        }`}
         onClick={signOutFunction}
       >
         Sign Out
@@ -116,7 +122,7 @@ const NavItem = ({ id, to, navOpen, iconSrc, label }) => (
     className="flex w-full items-center justify-center font-semibold gap-2 px-5 cursor-pointer"
   >
     <Link to={to}>
-      <div className="flex items-center gap-2">
+      <div className={`flex items-center gap-2 ${!navOpen && "max-md:hidden"}`}>
         <lord-icon
           src={iconSrc}
           trigger="loop-on-hover"
@@ -126,7 +132,7 @@ const NavItem = ({ id, to, navOpen, iconSrc, label }) => (
         ></lord-icon>
         <p
           className={`inline-block ${
-            !navOpen && "hidden"
+            !navOpen && "hidden max-md:hidden"
           } transition-all duration-300`}
         >
           {label}

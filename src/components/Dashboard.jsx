@@ -29,7 +29,7 @@ export const Dashboard = () => {
   return (
     <>
       <div className="flex flex-col justify-center items-center h-100vh w-screen py-4 text-center ">
-        <div className="flex flex-row gap-5 flex-wrap">
+        <div className="flex flex-row gap-5 flex-wrap justify-center">
           <div className="flex flex-row ">
             <div className=" bg-zinc-900 rounded-l-xl px-6 py-2 flex items-center justify-center">
               <img src={GreenDollar} alt="" className="size-10" />
@@ -65,7 +65,7 @@ export const Dashboard = () => {
           </div>
         </div>
         <div className="flex flex-col lg:flex-nowrap flex-wrap mt-6 w-full justify-between px-12 gap-4 ">
-          <div className="flex flex-row gap-4 w-full justify-around">
+          <div className="flex flex-row gap-4 w-full justify-around flex-wrap">
             <div className="bg-[#1C212A] rounded-2xl p-5">
               <p className="text-xl font-bold">Expense by Income</p>
               <Doughnut

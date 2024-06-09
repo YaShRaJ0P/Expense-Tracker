@@ -71,7 +71,7 @@ export const Transactions = () => {
         ...transaction,
         id: newTransactionRef.key,
       });
-      dispatch(addTransaction({...transaction,id:newTransactionRef.key}));
+      dispatch(addTransaction({ ...transaction, id: newTransactionRef.key }));
     } else {
       const transactionRef = ref(
         database,
@@ -105,9 +105,9 @@ export const Transactions = () => {
 
   return (
     <>
-      <div className="grid place-items-center w-screen px-24 max-lg:px-8">
-        <div className="w-full">
-          <div className="flex justify-between flex-row w-[73.8%]">
+      <div className="grid place-items-center w-screen px-24 max-lg:px-3">
+        <div className="w-full flex flex-col justify-center items-center gap-2">
+          <div className="flex justify-between flex-row w-full items-center">
             <h3 className="font-bold text-lg">
               {newTransaction || editable
                 ? "Create a New Transaction"
@@ -135,19 +135,19 @@ export const Transactions = () => {
             {!(newTransaction || editable) ? (
               <div className="flex flex-col w-full">
                 <div>
-                  <div className="w-full flex flex-row p-3 font-semibold text-lg bg-[#242B33] rounded-t-[4px] ">
-                    <div className="w-1/2">Category</div>
-                    <div className="w-1/6">Date</div>
-                    <div className="w-1/6">Amount</div>
-                    <div className="w-1/6 flex justify-center">Actions</div>
+                  <div className="w-full flex flex-row p-3 font-semibold text-lg bg-[#242B33] rounded-t-[4px] justify-around">
+                    <div className="w-2/5">Category</div>
+                    <div className="w-1/5">Date</div>
+                    <div className="w-1/5">Amount</div>
+                    <div className="w-1/5">Actions</div>
                   </div>
                   <div>
                     {transactionLists?.map((transaction) => (
                       <div
                         key={transaction.id}
-                        className="w-full flex flex-row p-3 font-normal text-sm bg-[#151A23] rounded-b-[4px]"
+                        className="w-full flex flex-row p-3 font-normal text-sm bg-[#151A23] rounded-b-[4px] justify-around"
                       >
-                        <div className="w-1/2 flex self-center">
+                        <div className="w-2/5 flex self-center">
                           {
                             categories.find(
                               (cat) => cat.id === transaction.category
@@ -159,13 +159,13 @@ export const Transactions = () => {
                             )?.title
                           }
                         </div>
-                        <div className="w-1/6 flex justify-start">
+                        <div className="w-1/5 flex justify-start">
                           {transaction.date?.slice(0, 10)}
                         </div>
-                        <div className="w-1/6 flex justify-start">
+                        <div className="w-1/5 flex justify-center">
                           {transaction.amount}
                         </div>
-                        <div className="w-1/6 flex self-center gap-3 justify-center">
+                        <div className="w-1/5 flex self-center gap-3 justify-start">
                           <div>
                             <img
                               src={edit}
@@ -302,15 +302,6 @@ export const Transactions = () => {
                 </form>
               </div>
             )}
-            <div className="w-1/3 bg-[#151A23] grid place-items-center ">
-              <lord-icon
-                src="https://cdn.lordicon.com/yrbmguoo.json"
-                trigger="loop"
-                delay="600"
-                colors="primary:white"
-                style={{ width: "150px", height: "150px" }}
-              />
-            </div>
           </div>
         </div>
       </div>

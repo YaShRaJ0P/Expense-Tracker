@@ -61,14 +61,14 @@ export const Categories = () => {
   };
 
   return (
-    <div className="grid place-items-center w-screen px-24 max-lg:px-8 text-white">
-      <div className="w-full">
-        <div className="flex justify-between flex-row w-3/5">
-          <h3 className="font-bold text-lg ">
+    <div className="grid place-items-center w-screen text-white">
+      <div className="w-full flex flex-col justify-center items-center gap-2 px-2">
+        <div className="flex justify-between flex-row w-full items-center">
+          <h3 className="font-bold text-lg sm:text-base">
             {isEditing ? "Edit Category" : "Categories"}
           </h3>
           <button
-            className={`p-3 rounded-[3px] font-semibold text-base ${
+            className={`p-3 rounded-[3px] font-semibold text-base sm:text-sm ${
               isEditing
                 ? "bg-red-500 hover:bg-red-600"
                 : "bg-green-500 hover:bg-green-600"
@@ -82,14 +82,14 @@ export const Categories = () => {
             )}
           </button>
         </div>
-        <div className="mt-4 w-full flex flex-row gap-4">
+        <div className="mt-4 w-full contents">
           {!isEditing ? (
-            <div className="flex flex-col w-3/5">
+            <div className="flex flex-col w-full">
               <div>
-                <div className="w-full flex flex-row p-3 font-semibold text-lg bg-[#242B33] rounded-t-[4px]">
-                  <div className="w-3/5 ">Category</div>
-                  <div className="w-1/5 px-4 ">Type</div>
-                  <div className="w-1/5 ">Actions</div>
+                <div className="w-full flex flex-row p-3 font-semibold text-lg sm:text-base bg-[#242B33] rounded-t-[4px]">
+                  <div className="w-1/2 ">Category</div>
+                  <div className="w-1/4 px-4 ">Type</div>
+                  <div className="w-1/4 flex justify-center items-center">Actions</div>
                 </div>
                 <div className="bg-[#151A23] rounded-b-[4px]">
                   {categories.map((e) => (
@@ -97,11 +97,11 @@ export const Categories = () => {
                       key={e.id}
                       className="w-full flex flex-row p-3 font-normal text-sm "
                     >
-                      <div className="w-3/5 flex self-center">
+                      <div className="w-1/2 flex self-center">
                         <div className="mr-2">{e.icon}</div>
                         <div>{e.title}</div>
                       </div>
-                      <div className="w-1/5 flex justify-start">
+                      <div className="w-1/4 flex justify-start">
                         <div
                           className={`rounded-[4px] px-3 pb-[4px] w-18 ${
                             e.expenditure ? "bg-red-500" : "bg-green-500"
@@ -110,7 +110,7 @@ export const Categories = () => {
                           {e.expenditure ? "Expense" : "Income"}
                         </div>
                       </div>
-                      <div className="w-1/5 flex self-center gap-3 justify-center">
+                      <div className="w-1/4 flex self-center gap-3 justify-center">
                         <img
                           src={edit}
                           alt="Edit"
@@ -134,7 +134,7 @@ export const Categories = () => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col w-3/5 p-8 gap-6 bg-[#222B38] rounded-md">
+            <div className="flex flex-col w-full p-8 gap-6 bg-[#222B38] rounded-md">
               <div className="flex flex-row">
                 <button
                   onClick={() =>
@@ -173,7 +173,7 @@ export const Categories = () => {
                     type="text"
                     name="Title"
                     id="Title"
-                    className="w-full bg-[#212429] rounded-sm border-2 border-white  p-2"
+                    className="w-full bg-[#212429] rounded-sm border-2 border-white p-2"
                   />
                 </div>
                 <div className="flex flex-col">
@@ -187,14 +187,14 @@ export const Categories = () => {
                     type="text"
                     name="Icon"
                     id="Icon"
-                    className="w-full bg-[#212429] rounded-sm border-2 border-white  p-2"
+                    className="w-full bg-[#212429] rounded-sm border-2 border-white p-2"
                   />
                 </div>
                 <div className="flex flex-row w-full justify-between items-center">
                   <input
                     type="submit"
                     value="Submit"
-                    className="bg-green-600 cursor-pointer px-4 py-2 hover:bg-green-700 rounded-[3px] font-semibold text-base"
+                    className="bg-green-600 cursor-pointer px-4 py-2 hover:bg-green-700 rounded-[3px] font-semibold text-base sm:text-sm"
                   />
                   <div
                     className={`rounded-[4px] px-3 py-1 ${
@@ -207,15 +207,6 @@ export const Categories = () => {
               </form>
             </div>
           )}
-          <div className="w-2/5 bg-[#151A23] grid place-items-center">
-            <lord-icon
-              src="https://cdn.lordicon.com/yrbmguoo.json"
-              trigger="loop"
-              delay="600"
-              colors="primary:white"
-              style={{ width: "150px", height: "150px" }}
-            />
-          </div>
         </div>
       </div>
     </div>
