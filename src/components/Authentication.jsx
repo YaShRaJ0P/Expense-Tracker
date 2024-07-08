@@ -21,8 +21,8 @@ export const Authentication = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   useEffect(() => {
-    if (isSignUp && (!email || !password || !username)) {
-      setError("NOT_FOUND");
+    if (email === "" || password === "" || (isSignUp && username === "")) {
+      setError("EMPTY_FIELDS");
     } else if (!emailRegex.test(email)) {
       setError("INVALID_EMAIL");
     } else if (password.length < 6) {
@@ -32,21 +32,34 @@ export const Authentication = () => {
     }
   }, [email, password, username, isSignUp]);
 
+  const handleError = (error) => {
+    switch (error.code) {
+      case "auth/email-already-in-use":
+        setError("EMAIL_ALREADY_IN_USE");
+        break;
+      case "auth/invalid-email":
+        setError("INVALID_EMAIL");
+        break;
+      case "auth/operation-not-allowed":
+        setError("OPERATION_NOT_ALLOWED");
+        break;
+      case "auth/weak-password":
+        setError("WEAK_PASSWORD");
+        break;
+      case "auth/user-not-found":
+        setError("USER_NOT_FOUND");
+        break;
+      case "auth/wrong-password":
+        setError("WRONG_PASSWORD");
+        break;
+      default:
+        setError("AUTH_ERROR");
+    }
+  };
+
   const SignUp = async () => {
     try {
-      if (!email || !password || !username) {
-        setError("NOT_FOUND");
-        return;
-      }
-      if (!emailRegex.test(email)) {
-        setError("INVALID_EMAIL");
-        return;
-      }
-      if (password.length < 6) {
-        setError("INVALID_PASSWORD");
-        return;
-      }
-
+      if (error) return;
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -92,64 +105,20 @@ export const Authentication = () => {
       };
 
       await set(categoriesRef, categoriesData);
-
       fetchCategoryData(dispatch, uid);
     } catch (error) {
       console.error(error);
-      switch (error.code) {
-        case "auth/email-already-in-use":
-          setError("EMAIL_ALREADY_IN_USE");
-          break;
-        case "auth/invalid-email":
-          setError("INVALID_EMAIL");
-          break;
-        case "auth/operation-not-allowed":
-          setError("OPERATION_NOT_ALLOWED");
-          break;
-        case "auth/weak-password":
-          setError("WEAK_PASSWORD");
-          break;
-        default:
-          setError("SIGNUP_ERROR");
-      }
+      handleError(error);
     }
   };
 
   const SignIn = async () => {
     try {
-      if (!email || !password) {
-        setError("NOT_FOUND");
-        return;
-      }
-      if (!emailRegex.test(email)) {
-        setError("INVALID_EMAIL");
-        return;
-      }
-
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      if (!userCredential) setError("NOT_FOUND");
+      if (error) return;
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.error(error);
-      switch (error.code) {
-        case "auth/user-not-found":
-          setError("USER_NOT_FOUND");
-          break;
-        case "auth/wrong-password":
-          setError("WRONG_PASSWORD");
-          break;
-        case "auth/invalid-email":
-          setError("INVALID_EMAIL");
-          break;
-        case "auth/invalid-credential":
-          setError("USER_NOT_FOUND");
-          break;
-        default:
-          setError("SIGNIN_ERROR");
-      }
+      handleError(error);
     }
   };
 
@@ -218,17 +187,17 @@ export const Authentication = () => {
             />
           </div>
           <p className="mt-2 text-red-500 text-sm">
+            {error === "EMPTY_FIELDS" && "Please fill out all fields."}
             {error === "INVALID_PASSWORD" &&
               "Password should be at least 6 characters."}
             {error === "INVALID_EMAIL" && "Invalid email format."}
-            {error === "USER_NOT_FOUND" && "Invalid credentials."}
+            {error === "USER_NOT_FOUND" && "User not found."}
             {error === "WRONG_PASSWORD" && "Incorrect password."}
             {error === "EMAIL_ALREADY_IN_USE" && "Email already in use."}
             {error === "OPERATION_NOT_ALLOWED" && "Operation not allowed."}
             {error === "WEAK_PASSWORD" && "Password is too weak."}
-            {error === "SIGNUP_ERROR" && "Error signing up. Please try again."}
-            {error === "SIGNIN_ERROR" && "Error signing in. Please try again."}
-            {error === "NOT_FOUND" && "Invalid credentials."}
+            {error === "AUTH_ERROR" &&
+              "Authentication error. Please try again."}
           </p>
           <button
             type="submit"

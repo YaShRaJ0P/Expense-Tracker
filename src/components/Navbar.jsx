@@ -35,8 +35,9 @@ export const Navbar = () => {
   return (
     <nav
       className={`p-6 ${
-        !navOpen && " max-md:m-2 max-md:h-fit max-md:border-2 max-md:border-white max-md:rounded-md max-md:border-solid max-md:p-2"
-      } text-center sticky top-0 h-screen flex flex-col justify-between text-white border-r-[1px] border-gray-500 border-opacity-40 border-dashed transition-all duration-300 max-md:absolute bg-inherit`}
+        !navOpen &&
+        " max-md:m-2 max-md:h-fit max-md:border-2 max-md:border-white max-md:rounded-md max-md:border-solid max-md:p-2"
+      } text-center sticky top-0 h-screen flex flex-col justify-between text-white border-r-[1px] border-gray-500 border-opacity-40 border-dashed transition-all duration-300 max-md:absolute bg-inherit z-10`}
     >
       <div className="flex flex-col gap-10 h-4/5">
         <div
